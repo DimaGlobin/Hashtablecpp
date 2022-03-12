@@ -1,4 +1,4 @@
-# Install script for directory: /home/dimaglobin/CLionProjects/Hashtablecpp
+# Install script for directory: /home/dimaglobin/Repositories/Hashtablecpp
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/dimaglobin/CLionProjects/Hashtablecpp/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/dimaglobin/Repositories/Hashtablecpp/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

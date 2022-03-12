@@ -39,13 +39,13 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = /home/dimaglobin/CLionProjects/Hashtablecpp/cmake-build-debug/
+cmake_ninja_workdir = /home/dimaglobin/Repositories/Hashtablecpp/cmake-build-debug/
 
 #############################################
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/dimaglobin/CLionProjects/Hashtablecpp/cmake-build-debug && /opt/clion-2021.3.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/dimaglobin/CLionProjects/Hashtablecpp -B/home/dimaglobin/CLionProjects/Hashtablecpp/cmake-build-debug
+  COMMAND = cd /home/dimaglobin/Repositories/Hashtablecpp/cmake-build-debug && /opt/clion-2021.3.3/bin/cmake/linux/bin/cmake --regenerate-during-build -S/home/dimaglobin/Repositories/Hashtablecpp -B/home/dimaglobin/Repositories/Hashtablecpp/cmake-build-debug
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -57,7 +57,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/dimaglobin/CLionProjects/Hashtablecpp/cmake-build-debug && /opt/clion-2021.3.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  COMMAND = cd /home/dimaglobin/Repositories/Hashtablecpp/cmake-build-debug && /opt/clion-2021.3.3/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
   DESC = No interactive CMake dialog available...
   restat = 1
 
@@ -72,7 +72,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 
 build cmake_object_order_depends_target_Hashtablecpp: phony || CMakeFiles/Hashtablecpp.dir
 
-build CMakeFiles/Hashtablecpp.dir/main.cpp.o: CXX_COMPILER__Hashtablecpp_Debug /home/dimaglobin/CLionProjects/Hashtablecpp/main.cpp || cmake_object_order_depends_target_Hashtablecpp
+build CMakeFiles/Hashtablecpp.dir/main.cpp.o: CXX_COMPILER__Hashtablecpp_Debug /home/dimaglobin/Repositories/Hashtablecpp/main.cpp || cmake_object_order_depends_target_Hashtablecpp
   DEP_FILE = CMakeFiles/Hashtablecpp.dir/main.cpp.o.d
   FLAGS = -g -std=gnu++14
   OBJECT_DIR = CMakeFiles/Hashtablecpp.dir
@@ -106,7 +106,7 @@ build Hashtablecpp: CXX_EXECUTABLE_LINKER__Hashtablecpp_Debug CMakeFiles/Hashtab
 # =============================================================================
 
 #############################################
-# Folder: /home/dimaglobin/CLionProjects/Hashtablecpp/cmake-build-debug
+# Folder: /home/dimaglobin/Repositories/Hashtablecpp/cmake-build-debug
 
 build all: phony Hashtablecpp
 
