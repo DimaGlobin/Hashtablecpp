@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include <cstring>
-#include <stdlib.h>
+#include <cstdlib>
 
 #define DELFAIL -1
 #define DELOK 1
@@ -21,13 +21,15 @@ public:
 
     explicit CHashTable (size_t HashSize);
     ~CHashTable ();
-    unsigned int hash_func (Elem_t elem);
+    static unsigned int hash_func (Elem_t elem);
     void hash_ins (Elem_t elem);
     void dump_hash_table ();
     void hash_resize ();
+    Node* hash_search (Elem_t elem);
+
 };
 
-unsigned int CHashTable::hash_func(Elem_t elem) {
+unsigned int CHashTable::hash_func (Elem_t elem) {
 
     unsigned int h = 0;
     while (*elem) {
@@ -64,8 +66,24 @@ public:
     ~CList ();
     Node* node_ins (Node* elem, Elem_t data);
     int node_del (Node* elem);
-    void CList_dump();
+    void CList_dump ();
+    Node* CList_search (Elem_t elem);
 };
+
+Node* CList::CList_search (Elem_t elem) {
+
+    Node* list_elem = this -> head_;
+
+    while (list_elem != nullptr) {
+
+        if (strcmp(elem, list_elem -> data_) == 0)
+            return list_elem;
+
+        list_elem = list_elem -> next_;
+    }
+
+    return nullptr;
+}
 
 Node* CList::node_ins(Node* elem, Elem_t data) {
 
@@ -134,11 +152,11 @@ int CList::node_del (Node* elem){
 
 void Node::node_dump (){
 
-    fprintf(stderr, "Node: 0x%p\n", this);
+    fprintf(stderr, "Node: [0x%p]\n", this);
     fprintf(stderr, "Node data: %s\n", this -> data_);
-    fprintf(stderr, "Node next: 0x%p\n", this -> next_);
-    fprintf(stderr, "Node prev: 0x%p\n", this -> prev_);
-    fprintf(stderr, "Node CList: 0x%p\n", this -> List_);
+    fprintf(stderr, "Node next: [0x%p]\n", this -> next_);
+    fprintf(stderr, "Node prev: [0x%p]\n", this -> prev_);
+    fprintf(stderr, "Node CList: [0x%p]\n", this -> List_);
     fprintf(stderr, "------------------------\n");
 }
 
@@ -173,15 +191,13 @@ void CList::CList_dump() {
     if (this != nullptr)
         elem = this -> head_;
 
-    fprintf(stderr, "CList: 0x%p\n", this);
+    fprintf(stderr, "CList: [0x%p]\n", this);
 
     if (this != nullptr) {
-        fprintf(stderr, "CList head: 0x%p\n", this -> head_);
-        fprintf(stderr, "CList tail: 0x%p\n", this -> tail_);
+        fprintf(stderr, "CList head: [0x%p]\n", this -> head_);
+        fprintf(stderr, "CList tail: [0x%p]\n", this -> tail_);
         fprintf(stderr, "num_of_elem: %d\n\n", this -> num_of_elem_);
     }
-
-    int i = 0;
 
     while (elem != nullptr) {
         elem->Node::node_dump();
@@ -196,7 +212,8 @@ CHashTable::CHashTable(size_t Input_HashSize) :
 
 {
 
-    this->Table_ = (CList **) calloc(Input_HashSize, sizeof(CList *));
+    this -> Table_ = new CList*[HashSize_];
+
     for (int i = 0; i < Input_HashSize; i++) {
         this -> Table_[i] = new CList;
     }
@@ -210,24 +227,23 @@ CHashTable::~CHashTable() {
     CList* save_list = nullptr;
     for (int i = 0; i < this -> HashSize_; i++) {
 
-        save_list = this -> Table_[i];
-        if (save_list != nullptr)
-            delete (save_list);
+        save_list = this->Table_[i];
+        delete (save_list);
     }
-
-    free (this -> Table_);
+    delete (this -> Table_);
 }
 
 void CHashTable::hash_resize() {
 
     size_t NewSize = this -> HashSize_ * 2;
-    CList** NewTable = (CList**)calloc(NewSize, sizeof(CList*));
+
+    auto NewTable = new CList*[NewSize];
     for (int i = 0; i < NewSize; i++) {
 
         NewTable[i] = new CList;
     }
 
-    CHashTable* h1 = new CHashTable(NewSize);
+    auto h1 = new CHashTable(NewSize);
 
     h1 -> HashSize_ = NewSize;
     h1 -> Table_ = NewTable;
@@ -257,7 +273,10 @@ void CHashTable::hash_ins(Elem_t elem) {
 
     const char* copystr = strdup(elem);
 
-    this -> Table_[hash_num] ->node_ins(this -> Table_[hash_num] -> tail_, copystr);
+    if (this -> Table_[hash_num] ->CList_search(copystr) != nullptr)
+        return;
+
+    this -> Table_[hash_num] ->node_ins(this -> Table_[hash_num] -> head_, copystr);
 
     this -> NumOfNodes_++;
 
@@ -265,8 +284,8 @@ void CHashTable::hash_ins(Elem_t elem) {
 
 void CHashTable::dump_hash_table() {
 
-    fprintf(stderr, "\nHash table: [0x%p] {\n");
-    fprintf(stderr, "Hash table size: %d\n", this -> HashSize_);
+    fprintf(stderr, "\nHash table: [0x%p] {\n", this);
+    fprintf(stderr, "Hash table size: %lu\n", this -> HashSize_);
     fprintf(stderr, "Number of nodes: %d\n\n", this -> NumOfNodes_);
 
     for (int i = 0; i < this -> HashSize_; i++) {
@@ -276,6 +295,17 @@ void CHashTable::dump_hash_table() {
     }
 
     fprintf(stderr, "}\n\n");
+}
+
+Node* CHashTable::hash_search (Elem_t elem) {
+
+    for (int i = 0; i < this -> HashSize_; i++) {
+
+        if (this -> Table_[i] -> CList_search(elem) != nullptr)
+            return this -> Table_[i] -> CList_search(elem);
+    }
+
+    return nullptr;
 }
 
 int main() {
@@ -313,6 +343,8 @@ int main() {
     h1.hash_ins("Poltorashka");
     h1.hash_ins("1Poltorashka");
     h1.dump_hash_table();
+
+    fprintf(stderr, "Search result: [0x%p]\n", h1.hash_search("Dimas"));
 
     return 0;
 }
